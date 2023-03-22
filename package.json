@@ -1,5 +1,5 @@
 {
-  "name": "video-metadata",
+  "name": "fast-video-metadata",
   "version": "1.0.0",
   "description": "Fast metadata extraction without dependencies (e. g. spawning ffmpeg or exiftool.",
   "main": "index.js",
