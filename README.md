@@ -1,9 +1,9 @@
-# video-metadata
+# fast-video-metadata
 
 ## Example
 
 ```
-const videoMetadata = require('video-metadata');
+const videoMetadata = require('fast-video-metadata');
 const metadata = await videoMetadata.read('~/Desktop/IMG_0835.MOV')
 console.log(metadata)
 ```
