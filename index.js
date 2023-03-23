@@ -8,6 +8,9 @@ async function getVideoInfo(filename) {
     file = await fs.open(filename, "r");
     // https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html
     const meta = await readAtomBranch(file, "moov", "meta");
+    if (!meta) {
+      return;
+    }
     // https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/Metadata/Metadata.html
     const keys = meta.find((x) => x.type === "keys");
     const keysContent = await readKeysAtomContent(file, keys);
@@ -51,10 +54,11 @@ async function readAtomBranch(file, ...path) {
   const stat = await file.stat();
   let atoms = await readAtoms(file, 0, stat.size);
   for (const s of path) {
-    atoms = await readSubatoms(
-      file,
-      atoms.find((x) => x.type === s)
-    );
+    const a = atoms.find((x) => x.type === s);
+    if (!a) {
+      return;
+    }
+    atoms = await readSubatoms(file, a);
   }
   return atoms;
 }
