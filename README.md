@@ -1,5 +1,7 @@
 # fast-video-metadata
 
+Fast video metadata extraction without dependencies (e. g. spawning ffmpeg or exiftool).
+
 ## Examples
 
 ### Essentials (opinionated)

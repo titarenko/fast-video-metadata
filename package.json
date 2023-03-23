@@ -1,8 +1,22 @@
 {
   "name": "fast-video-metadata",
   "version": "2.0.0",
-  "description": "Fast metadata extraction without dependencies (e. g. spawning ffmpeg or exiftool).",
+  "description": "Fast video metadata extraction without dependencies (e. g. spawning ffmpeg or exiftool).",
   "main": "./src/index.js",
   "author": "Constantin Titarenko",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "fast",
+    "exif",
+    "exiftool",
+    "ffmpeg",
+    "metadata",
+    "video",
+    "mp4",
+    "mov"
+  ],
+  "bugs": {
+    "url": "https://github.com/titarenko/fast-video-metadata/issues"
+  },
+  "homepage": "https://github.com/titarenko/fast-video-metadata#readme"
 }
