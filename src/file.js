@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
+const parsers = require("./parsers");
 
-class AtomContainer {
+class File {
   constructor(handle, offset, limit) {
     this.handle = handle;
     this.offset = offset;
@@ -26,7 +27,7 @@ class AtomContainer {
       if (size >= 8 && size + offset <= this.limit) {
         atoms.push({
           type,
-          file: new AtomContainer(this.handle, offset + 8, offset + size),
+          file: new File(this.handle, offset + 8, offset + size),
         });
         offset += size;
       } else {
@@ -38,10 +39,25 @@ class AtomContainer {
   async readAtomTree() {
     const atoms = await this.readAtoms();
     for (const a of atoms) {
-      a.atoms = await a.file.readAtomTree();
+      const content = await parsers.parse(a);
+      if (content) {
+        a.content = content;
+      } else {
+        const atoms = await a.file.readAtomTree();
+        if (atoms.length) {
+          a.atoms = atoms;
+        } else {
+          a.unparsed = true;
+        }
+      }
     }
     return atoms;
   }
+  async readContent() {
+    const buffer = Buffer.alloc(this.limit - this.offset);
+    await this.handle.read(buffer, 0, buffer.length, this.offset);
+    return buffer;
+  }
 }
 
-module.exports = AtomContainer;
+module.exports = File;
