@@ -1,19 +1,22 @@
-module.exports = parse;
+import { Atom } from "../atom";
 
-async function parse(atom) {
+export async function parse(atom: Atom) {
   const content = await atom.file.readContent();
+  if (!content) {
+    return;
+  }
   const type = content.readInt32BE();
   const locale = content.readInt32BE(4);
   const value = content.subarray(8);
   return { type, locale, value: parseValue(type, locale, value) };
 }
 
-function parseValue(type, locale, value) {
+function parseValue(type: number, locale: number, value: Buffer) {
   switch (type) {
     case 1:
       return value.toString("utf-8");
     case 2:
-      return value.toString("utf-16");
+      return value.toString("utf16le");
     case 23:
       return value.readFloatBE();
     case 24:

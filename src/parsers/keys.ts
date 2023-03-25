@@ -1,7 +1,10 @@
-module.exports = parse;
+import { Atom } from "../atom";
 
-async function parse(atom) {
+export async function parse(atom: Atom) {
   const content = await atom.file.readContent();
+  if (!content) {
+    return;
+  }
   let count = content.readUInt32BE(4);
   let offset = 4 + 4;
   const keys = [];

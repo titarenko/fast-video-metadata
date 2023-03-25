@@ -1,23 +1,38 @@
-const fs = require("fs/promises");
-const parsers = require("./parsers");
+import fs from "fs/promises";
+import { parse } from "./parsers";
+import { Atom } from "./atom";
 
-class File {
-  constructor(handle, offset, limit) {
+export class File {
+  private header: Buffer;
+
+  constructor(
+    private handle?: fs.FileHandle,
+    private offset?: number,
+    private limit?: number
+  ) {
     this.handle = handle;
     this.offset = offset;
     this.limit = limit;
     this.header = Buffer.alloc(8);
   }
-  async open(filename) {
+
+  async open(filename: string) {
     this.handle = await fs.open(filename, "r");
     this.offset = 0;
     const stat = await this.handle.stat();
     this.limit = stat.size;
   }
+
   async close() {
-    await this.handle.close();
+    if (this.handle) {
+      await this.handle.close();
+    }
   }
-  async readAtoms() {
+
+  async readAtoms(): Promise<Atom[] | undefined> {
+    if (!this.handle || this.offset === undefined || this.limit === undefined) {
+      return;
+    }
     const atoms = [];
     let offset = this.offset;
     while (offset < this.limit) {
@@ -36,15 +51,19 @@ class File {
     }
     return atoms;
   }
+
   async readAtomTree() {
     const atoms = await this.readAtoms();
+    if (!atoms) {
+      return;
+    }
     for (const a of atoms) {
-      const content = await parsers.parse(a);
+      const content = await parse(a);
       if (content) {
         a.content = content;
       } else {
         const atoms = await a.file.readAtomTree();
-        if (atoms.length) {
+        if (atoms && atoms.length) {
           a.atoms = atoms;
         } else {
           a.unparsed = true;
@@ -53,11 +72,13 @@ class File {
     }
     return atoms;
   }
+
   async readContent() {
+    if (!this.handle || this.offset === undefined || this.limit === undefined) {
+      return;
+    }
     const buffer = Buffer.alloc(this.limit - this.offset);
     await this.handle.read(buffer, 0, buffer.length, this.offset);
     return buffer;
   }
 }
-
-module.exports = File;

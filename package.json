@@ -1,8 +1,9 @@
 {
   "name": "fast-video-metadata",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Fast video metadata extraction without dependencies (e. g. spawning ffmpeg or exiftool).",
-  "main": "./src/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Constantin Titarenko",
   "license": "MIT",
   "keywords": [
@@ -18,5 +19,23 @@
   "bugs": {
     "url": "https://github.com/titarenko/fast-video-metadata/issues"
   },
-  "homepage": "https://github.com/titarenko/fast-video-metadata#readme"
+  "homepage": "https://github.com/titarenko/fast-video-metadata#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/titarenko/fast-video-metadata.git"
+  },
+  "scripts": {
+    "test": "jest --coverage",
+    "coveralls": "coveralls < coverage/lcov.info",
+    "prepublish": "npm t && tsc",
+    "release-major": "npm version major && npm publish && git push",
+    "release-minor": "npm version minor && npm publish && git push",
+    "release-patch": "npm version patch && npm publish && git push"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.5.0",
+    "@types/node": "^18.15.9",
+    "ts-jest": "^29.0.5",
+    "typescript": "^5.0.2"
+  }
 }

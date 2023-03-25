@@ -1,32 +1,42 @@
-const File = require("./file");
+import { Atom } from "./atom";
+import { File } from "./file";
 
-module.exports = { read };
+export { Atom };
 
-async function read(filename, extended = false) {
+export interface Essentials {
+  creationTime: Date;
+  modificationTime: Date;
+  meta: { [key: string]: any };
+}
+
+export async function read(filename: string, extended = false) {
   const file = new File();
   try {
     await file.open(filename);
     const atoms = await file.readAtomTree();
+    if (!atoms) {
+      return;
+    }
     if (extended) {
-      omitFile(atoms);
+      deleteFileProperty(atoms);
       return atoms;
     }
-    return compact(atoms);
+    return getEssentials(atoms);
   } finally {
     await file.close();
   }
 }
 
-function omitFile(atoms) {
+function deleteFileProperty(atoms: Partial<Atom>[]) {
   for (const a of atoms) {
     delete a.file;
     if (a.atoms) {
-      omitFile(a.atoms);
+      deleteFileProperty(a.atoms);
     }
   }
 }
 
-function compact(atoms) {
+function getEssentials(atoms: Atom[]): Essentials {
   const mvhd = find(atoms, "moov", "mvhd");
   const keys = find(atoms, "moov", "meta", "keys");
   const ilst = find(atoms, "moov", "meta", "ilst");
@@ -44,7 +54,7 @@ function compact(atoms) {
   return result;
 }
 
-function find(atoms, ...path) {
+function find(atoms: Atom[], ...path: string[]) {
   let atom;
   for (const p of path) {
     atom = atoms.find((x) => x.type === p);
