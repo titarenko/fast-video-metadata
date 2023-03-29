@@ -63,7 +63,7 @@ function find(atoms: Atom[], ...path: string[]) {
     if (atom && atom.atoms) {
       atoms = atom.atoms;
     } else {
-      break;
+      return atom;
     }
   }
   return atom;
