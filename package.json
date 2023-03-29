@@ -1,6 +1,6 @@
 {
   "name": "fast-video-metadata",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Fast video metadata extraction without dependencies (e. g. spawning ffmpeg or exiftool).",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
