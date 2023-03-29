@@ -38,8 +38,10 @@ function deleteFileProperty(atoms: Partial<Atom>[]) {
 
 function getEssentials(atoms: Atom[]): Essentials {
   const mvhd = find(atoms, "moov", "mvhd");
-  const keys = find(atoms, "moov", "meta", "keys");
-  const ilst = find(atoms, "moov", "meta", "ilst");
+  const keys =
+    find(atoms, "moov", "meta", "keys") || find(atoms, "meta", "keys");
+  const ilst =
+    find(atoms, "moov", "meta", "ilst") || find(atoms, "meta", "ilst");
   let result;
   if (mvhd) {
     result = { ...mvhd.content };
