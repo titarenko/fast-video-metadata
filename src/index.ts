@@ -1,13 +1,8 @@
 import { Atom } from "./atom";
 import { File } from "./file";
+import { Essentials, getEssentials } from "./essentials";
 
-export { Atom };
-
-export interface Essentials {
-  creationTime: Date;
-  modificationTime: Date;
-  meta: { [key: string]: any };
-}
+export { Atom, Essentials };
 
 export async function read(filename: string, extended = false) {
   const file = new File();
@@ -21,7 +16,7 @@ export async function read(filename: string, extended = false) {
       deleteFileProperty(atoms);
       return atoms;
     }
-    return getEssentials(atoms);
+    return await getEssentials(atoms);
   } finally {
     await file.close();
   }
@@ -34,37 +29,4 @@ function deleteFileProperty(atoms: Partial<Atom>[]) {
       deleteFileProperty(a.atoms);
     }
   }
-}
-
-function getEssentials(atoms: Atom[]): Essentials {
-  const mvhd = find(atoms, "moov", "mvhd");
-  const keys = find(atoms, "moov", "meta", "keys");
-  const ilst = find(atoms, "moov", "meta", "ilst");
-  let result;
-  if (mvhd) {
-    result = { ...mvhd.content };
-  }
-  if (keys && ilst) {
-    result = result || {};
-    result.meta = {};
-    for (const i of ilst.content) {
-      result.meta[keys.content[i.index].value] = i.value;
-    }
-  }
-  return result;
-}
-
-function find(atoms: Atom[], ...path: string[]) {
-  let atom,
-    p = path.shift();
-  while (p) {
-    atom = atoms.find((x) => x.type === p);
-    if (atom && atom.atoms) {
-      atoms = atom.atoms;
-    } else if (path.length) {
-      return;
-    }
-    p = path.shift();
-  }
-  return atom;
 }

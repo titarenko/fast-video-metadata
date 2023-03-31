@@ -95,8 +95,16 @@ export class File {
     return atoms;
   }
 
-  async readContent() {
-    if (!this.handle || this.offset === undefined || this.limit === undefined) {
+  async readContent(offset?: number, length?: number) {
+    if (!this.handle) {
+      return;
+    }
+    if (offset !== undefined && length !== undefined) {
+      const buffer = Buffer.alloc(length);
+      this.handle.read(buffer, 0, buffer.length, offset);
+      return buffer;
+    }
+    if (this.offset === undefined || this.limit === undefined) {
       return;
     }
     const buffer = Buffer.alloc(this.limit - this.offset);

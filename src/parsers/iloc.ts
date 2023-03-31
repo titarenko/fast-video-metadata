@@ -122,11 +122,6 @@ export async function parse(atom: Atom) {
   }
 
   return {
-    offset: atom.offset,
-
-    size: atom.size,
-    type: "iloc",
-
     version,
     flags,
 

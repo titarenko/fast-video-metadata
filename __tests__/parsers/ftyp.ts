@@ -22,9 +22,6 @@ describe("ftyp", () => {
     });
 
     expect(result).toStrictEqual({
-      offset: 0,
-      size: 36,
-      type: "ftyp",
       majorBrand: "heic",
       minorBrand: "\0\0\0\0",
       compatibleBrands: ["mif1", "MiPr", "miaf", "MiHB", "heic"],

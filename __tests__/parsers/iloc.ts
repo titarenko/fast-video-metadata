@@ -89,10 +89,6 @@ describe("iloc", () => {
     });
 
     expect(result).toMatchObject({
-      offset: 0,
-      size: 832,
-      type: "iloc",
-
       version: 1,
       flags: 0,
 

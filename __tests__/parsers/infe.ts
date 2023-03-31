@@ -20,10 +20,6 @@ describe("infe", () => {
     });
 
     expect(result).toStrictEqual({
-      offset: 0,
-      size: 21,
-      type: "infe",
-
       version: 2,
       flags: 1,
 

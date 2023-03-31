@@ -46,9 +46,6 @@ describe("ipma", () => {
     });
 
     expect(result).toStrictEqual({
-      offset: 0,
-      size: 319,
-      type: "ipma",
       version: 0,
       flags: 0,
       entries: [

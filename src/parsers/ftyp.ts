@@ -14,9 +14,6 @@ export async function parse(atom: Atom) {
     offset += 4;
   }
   return {
-    offset: atom.offset,
-    size: atom.size,
-    type: atom.type,
     majorBrand,
     minorBrand,
     compatibleBrands,
