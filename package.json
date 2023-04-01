@@ -33,8 +33,12 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
+    "@types/exif-reader": "^1.0.0",
     "@types/node": "^18.15.9",
     "ts-jest": "^29.0.5",
     "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "exif-reader": "^1.2.0"
   }
 }
